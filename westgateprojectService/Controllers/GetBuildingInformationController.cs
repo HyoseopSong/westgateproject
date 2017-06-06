@@ -50,16 +50,6 @@ namespace westgateprojectService.Controllers
             }
             else
                 return null;
-        }
-        
-        public IDictionary<string, string> Post(string temp, string temp2)
-        {
-            IDictionary<string, string> postDictionary = new Dictionary<string, string>
-            {
-                { "First", temp },
-                { "Second", temp2 }
-            };
-            return postDictionary;
-        }
+        }        
     }
 }
