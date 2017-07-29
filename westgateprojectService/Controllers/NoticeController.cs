@@ -10,6 +10,7 @@ using westgateprojectService.DataObjects;
 
 namespace westgateprojectService.Controllers
 {
+    [Authorize]
     [MobileAppController]
     public class NoticeController : ApiController
     {

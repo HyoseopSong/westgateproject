@@ -8,6 +8,7 @@ using westgateprojectService.Controllers;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace westgateprojectService
 {
