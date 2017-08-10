@@ -8,16 +8,16 @@ namespace westgateprojectService.DataObjects
 {
     public class ContentsEntity : TableEntity
     {
-        public ContentsEntity(string patKey, string blobName, string text)
+        public ContentsEntity(string id, string blobName, string text)
         {
-            PartitionKey = patKey;
+            PartitionKey = id;
             RowKey = blobName;
-            Text = text;
+            Context = text;
         }
 
         public ContentsEntity() { }
 
-        public string Text { get; set; }
-        public string blobName { get; set; }
+
+        public string Context { get; set; }
     }
 }
