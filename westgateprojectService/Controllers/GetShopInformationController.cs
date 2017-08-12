@@ -1,4 +1,6 @@
-﻿using Microsoft.Azure.Mobile.Server.Config;
+﻿using Microsoft.Azure;
+using Microsoft.Azure.Mobile.Server.Config;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,47 @@ namespace westgateprojectService.Controllers
                 shopInfo.Add(entity.RowKey, entity.내용);
             }
             return shopInfo;
+        }
+
+        public IDictionary<string, string> Get(string building, string floor, string location)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference(building);
+            // Construct the query operation for all customer entities where PartitionKey="Smith".
+
+            // Create a retrieve operation that takes a customer entity.
+            TableOperation retrieveOperation = TableOperation.Retrieve<ShopInfoEntity>(floor, location);
+
+            // Execute the retrieve operation.
+            TableResult retrievedResult = table.Execute(retrieveOperation);
+
+            // Print the phone number of the result.
+            if (retrievedResult.Result != null)
+            {
+                //오너 값으로 등록된 사진 가져오기
+                string[] tempOwnerId = ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@');
+
+                CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
+                TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
+
+                IDictionary<string, string> myActivity = new Dictionary<string, string>
+                {
+                    { "ShopName", ((ShopInfoEntity)retrievedResult.Result).Name },
+                    { "ShopOwner", ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@')[0] }
+                };
+                foreach (ContentsEntity entity in tableOwner.ExecuteQuery(query))
+                {
+                    myActivity.Add(entity.RowKey, entity.Context);
+                }
+                return myActivity;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }
