@@ -21,7 +21,6 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var containerName = id.Split('@');
             CloudTable table = tableClient.GetTableReference(containerName[0]);
-            // Construct the query operation for all customer entities where PartitionKey="Smith".
             TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
             IDictionary<string, string> myActivity = new Dictionary<string, string>();
@@ -43,6 +42,12 @@ namespace westgateprojectService.Controllers
             ContentsEntity contents = new ContentsEntity(id, blobName, shopName, content);
             TableOperation insertOperation = TableOperation.Insert(contents);
             TableResult result = table.Execute(insertOperation);
+
+            CloudTable recentTable = tableClient.GetTableReference("Recent");
+            RecentEntity recentContents = new RecentEntity(id, shopName, blobName, content);
+            TableOperation recentOperation = TableOperation.Insert(recentContents);
+            table.CreateIfNotExists();
+            TableResult recentResult = recentTable.Execute(recentOperation);
         }
 
         public void Delete(string id, string blobName)
@@ -52,24 +57,23 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var containerName = id.Split('@');
             CloudTable table = tableClient.GetTableReference(containerName[0]);
-
-            // Create a retrieve operation that expects a customer entity.
             TableOperation retrieveOperation = TableOperation.Retrieve<ContentsEntity>(id, blobName);
-
-            // Execute the operation.
             TableResult retrievedResult = table.Execute(retrieveOperation);
-
-            // Assign the result to a CustomerEntity.
             ContentsEntity deleteEntity = (ContentsEntity)retrievedResult.Result;
 
-            // Create the Delete TableOperation.
+            CloudTable recentTable = tableClient.GetTableReference("Recent");
+            TableOperation recentRetrieveOperation = TableOperation.Retrieve<RecentEntity>(id, blobName);
+            TableResult recentRetrievedResult = recentTable.Execute(recentRetrieveOperation);
+            RecentEntity recentDeleteEntity = (RecentEntity)recentRetrievedResult.Result;
+
             if (deleteEntity != null)
             {
                 TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
-
-                // Execute the operation.
                 table.Execute(deleteOperation);
-                
+
+                TableOperation recentDeleteOperation = TableOperation.Delete(recentDeleteEntity);
+                recentTable.Execute(recentDeleteOperation);
+
             }
             else
             {
