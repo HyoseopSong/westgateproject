@@ -33,14 +33,14 @@ namespace westgateprojectService.Controllers
             return myActivity;
         }
 
-        public void Post(string content, string id, string blobName)
+        public void Post(string content, string id, string blobName, string shopName)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var containerName = id.Split('@');
             CloudTable table = tableClient.GetTableReference(containerName[0]);
             table.CreateIfNotExists();
-            ContentsEntity contents = new ContentsEntity(id, blobName, content);
+            ContentsEntity contents = new ContentsEntity(id, blobName, shopName, content);
             TableOperation insertOperation = TableOperation.Insert(contents);
             TableResult result = table.Execute(insertOperation);
         }
