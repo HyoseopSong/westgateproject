@@ -80,13 +80,14 @@ namespace westgateprojectService.Controllers
                     result.Add("ShopName", entity.ShopName);
                     result.Add("PhoneNumber", entity.PhoneNumber);
                     result.Add("AddInfo", entity.AddInfo);
+                    result.Add("Payment", entity.Payment);
                     return result;
                 }                
             }
             return null;
         }
 
-        public void Post(string id, string name, string building, string floor, string location, string number, string addInfo)
+        public void Post(string id, string name, string building, string floor, string location, string number, string addInfo, string payment)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
@@ -95,9 +96,13 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("UserInformation");
             table.CreateIfNotExists();
-            UserInfoEntity contents = new UserInfoEntity(id, shopLocation, name, number, addInfo);
+            UserInfoEntity contents = new UserInfoEntity(id, shopLocation, name, number, addInfo, payment);
             TableOperation insertOperation = TableOperation.InsertOrReplace(contents);
             TableResult result = table.Execute(insertOperation);
+
+            string[] tempOwnerId = id.Split('@');
+            CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
+            tableOwner.CreateIfNotExists();
         }
 
         public void Delete(string id, string shopLocation)

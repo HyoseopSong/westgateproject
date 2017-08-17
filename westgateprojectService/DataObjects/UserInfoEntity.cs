@@ -8,7 +8,7 @@ namespace westgateprojectService.DataObjects
 {
     public class UserInfoEntity : TableEntity
     {
-        public UserInfoEntity(string id, string shopLocation, string shopName, string phoneNumber, string addInfo)
+        public UserInfoEntity(string id, string shopLocation, string shopName, string phoneNumber, string addInfo, string payment)
         {
             PartitionKey = id;
             RowKey = shopLocation;
@@ -17,6 +17,7 @@ namespace westgateprojectService.DataObjects
             PhoneNumber = phoneNumber;
             Paid = false;
             AddInfo = addInfo;
+            Payment = payment;
         }
 
         public UserInfoEntity() { }
@@ -26,6 +27,7 @@ namespace westgateprojectService.DataObjects
         public string PhoneNumber { get; set; }
         public bool Paid { get; set; }
         public string AddInfo { get; set; }
+        public string Payment { get; set; }
     }
 
 }
