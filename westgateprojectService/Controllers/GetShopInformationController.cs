@@ -45,6 +45,10 @@ namespace westgateprojectService.Controllers
             // Print the phone number of the result.
             if (retrievedResult.Result != null)
             {
+                CloudTable tableUserInfo = tableClient.GetTableReference("UserInformation");
+                TableOperation retrieveUserInfoOperation = TableOperation.Retrieve<UserInfoEntity>(((ShopInfoEntity)retrievedResult.Result).Owner, building + ":" + floor + ":" + location);
+                TableResult retrievedUserInfoResult = tableUserInfo.Execute(retrieveUserInfoOperation);
+
                 //오너 값으로 등록된 사진 가져오기
                 string[] tempOwnerId = ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@');
 
@@ -54,7 +58,8 @@ namespace westgateprojectService.Controllers
                 IDictionary<string, string> myActivity = new Dictionary<string, string>
                 {
                     { "ShopName", ((ShopInfoEntity)retrievedResult.Result).Name },
-                    { "ShopOwner", ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@')[0] }
+                    { "ShopOwner", ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@')[0] },
+                    { "PhoneNumber", ((UserInfoEntity)retrievedUserInfoResult.Result).PhoneNumber }
                 };
                 foreach (ContentsEntity entity in tableOwner.ExecuteQuery(query))
                 {
