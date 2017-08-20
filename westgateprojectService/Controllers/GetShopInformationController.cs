@@ -42,26 +42,31 @@ namespace westgateprojectService.Controllers
             // Execute the retrieve operation.
             TableResult retrievedResult = table.Execute(retrieveOperation);
 
+            ShopInfoEntity retrievedEntity = (ShopInfoEntity)retrievedResult.Result;
             // Print the phone number of the result.
-            if (retrievedResult.Result != null)
+            if (retrievedEntity != null)
             {
                 CloudTable tableUserInfo = tableClient.GetTableReference("UserInformation");
-                TableOperation retrieveUserInfoOperation = TableOperation.Retrieve<UserInfoEntity>(((ShopInfoEntity)retrievedResult.Result).Owner, building + ":" + floor + ":" + location);
+                TableOperation retrieveUserInfoOperation = TableOperation.Retrieve<UserInfoEntity>(retrievedEntity.OwnerID, building + ":" + floor + ":" + location);
                 TableResult retrievedUserInfoResult = tableUserInfo.Execute(retrieveUserInfoOperation);
-
+                UserInfoEntity retrievedUserInfoEntity = (UserInfoEntity)retrievedUserInfoResult.Result;
                 //오너 값으로 등록된 사진 가져오기
-                string[] tempOwnerId = ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@');
+                string[] tempOwnerId = retrievedEntity.OwnerID.Split('@');
 
                 CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
+
+                TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
+                        TableQuery.GenerateFilterCondition("ShopName", QueryComparisons.Equal, retrievedEntity.ShopName));
+
                 TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
                 IDictionary<string, string> myActivity = new Dictionary<string, string>
                 {
-                    { "ShopName", ((ShopInfoEntity)retrievedResult.Result).Name },
-                    { "ShopOwner", ((ShopInfoEntity)retrievedResult.Result).Owner.Split('@')[0] },
-                    { "PhoneNumber", ((UserInfoEntity)retrievedUserInfoResult.Result).PhoneNumber }
+                    { "ShopName", retrievedEntity.ShopName },
+                    { "ShopOwner", retrievedEntity.OwnerID.Split('@')[0] },
+                    { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber }
                 };
-                foreach (ContentsEntity entity in tableOwner.ExecuteQuery(query))
+                foreach (ContentsEntity entity in tableOwner.ExecuteQuery(rangeQuery))
                 {
                     myActivity.Add(entity.RowKey, entity.Context);
                 }

@@ -8,13 +8,13 @@ namespace westgateprojectService.DataObjects
         {
             PartitionKey = floor;
             RowKey = location;
-            Owner = id;
-            Name = name;
+            OwnerID = id;
+            ShopName = name;
         }
         public ShopInfoEntity() { }
 
-        public string Owner { get; set; }
-        public string Name { get; set; }
+        public string OwnerID { get; set; }
+        public string ShopName { get; set; }
 
         
     }

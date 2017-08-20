@@ -14,7 +14,7 @@ namespace westgateprojectService.Controllers
     [MobileAppController]
     public class UploadController : ApiController
     {
-        public IDictionary<string, string> Get(string id)
+        public List<MyEntity> Get(string id)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             
@@ -23,11 +23,13 @@ namespace westgateprojectService.Controllers
             CloudTable table = tableClient.GetTableReference(containerName[0]);
             TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
-            IDictionary<string, string> myActivity = new Dictionary<string, string>();
+            List<MyEntity> myActivity = new List<MyEntity>();
             // Print the fields for each customer.
             foreach (ContentsEntity entity in table.ExecuteQuery(query))
             {
-                myActivity.Add(entity.RowKey, entity.Context);
+                MyEntity result = new MyEntity(entity.RowKey, entity.ShopName, entity.Context);
+                
+                myActivity.Add(result);
             }
             return myActivity;
         }
@@ -44,7 +46,7 @@ namespace westgateprojectService.Controllers
             TableResult result = table.Execute(insertOperation);
 
             CloudTable recentTable = tableClient.GetTableReference("Recent");
-            RecentEntity recentContents = new RecentEntity(id, shopName, blobName, content);
+            ContentsEntity recentContents = new ContentsEntity(id, blobName, shopName, content);
             TableOperation recentOperation = TableOperation.Insert(recentContents);
             table.CreateIfNotExists();
             TableResult recentResult = recentTable.Execute(recentOperation);
@@ -62,9 +64,9 @@ namespace westgateprojectService.Controllers
             ContentsEntity deleteEntity = (ContentsEntity)retrievedResult.Result;
 
             CloudTable recentTable = tableClient.GetTableReference("Recent");
-            TableOperation recentRetrieveOperation = TableOperation.Retrieve<RecentEntity>(id, blobName);
+            TableOperation recentRetrieveOperation = TableOperation.Retrieve<ContentsEntity>(id, blobName);
             TableResult recentRetrievedResult = recentTable.Execute(recentRetrieveOperation);
-            RecentEntity recentDeleteEntity = (RecentEntity)recentRetrievedResult.Result;
+            ContentsEntity recentDeleteEntity = (ContentsEntity)recentRetrievedResult.Result;
 
             if (deleteEntity != null)
             {
