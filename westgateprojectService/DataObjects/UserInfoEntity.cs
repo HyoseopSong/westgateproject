@@ -16,6 +16,7 @@ namespace westgateprojectService.DataObjects
             ShopName = shopName;
             PhoneNumber = phoneNumber;
             Paid = false;
+            InitialRegister = true;
             AddInfo = addInfo;
             Payment = payment;
         }
@@ -28,6 +29,7 @@ namespace westgateprojectService.DataObjects
         public bool Paid { get; set; }
         public string AddInfo { get; set; }
         public string Payment { get; set; }
+        public bool InitialRegister { get; set; }
     }
 
 }

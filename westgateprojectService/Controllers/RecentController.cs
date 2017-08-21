@@ -21,6 +21,7 @@ namespace westgateprojectService.Controllers
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("Recent");
+            table.CreateIfNotExistsAsync();
             TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
             List<ContentsEntity> myActivity = new List<ContentsEntity>();
@@ -40,6 +41,7 @@ namespace westgateprojectService.Controllers
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("UserInformation");
+            table.CreateIfNotExistsAsync();
             TableQuery<UserInfoEntity> rangeQuery = new TableQuery<UserInfoEntity>().Where(
                     TableQuery.GenerateFilterCondition("ShopName", QueryComparisons.Equal, shopName));
 

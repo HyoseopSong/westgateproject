@@ -21,6 +21,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var containerName = id.Split('@');
             CloudTable table = tableClient.GetTableReference(containerName[0]);
+            table.CreateIfNotExistsAsync();
             TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
             List<MyEntity> myActivity = new List<MyEntity>();

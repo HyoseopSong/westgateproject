@@ -48,6 +48,7 @@ namespace westgateprojectService.Controllers
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("UserInformation");
+            table.CreateIfNotExistsAsync();
 
             TableQuery<UserInfoEntity> queryID = new TableQuery<UserInfoEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id));
 
@@ -66,6 +67,7 @@ namespace westgateprojectService.Controllers
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("UserInformation");
+            table.CreateIfNotExistsAsync();
 
             string shopLocation = building + ":" + floor + ":" + location;
 

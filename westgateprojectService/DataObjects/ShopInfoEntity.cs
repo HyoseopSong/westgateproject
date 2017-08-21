@@ -15,7 +15,8 @@ namespace westgateprojectService.DataObjects
 
         public string OwnerID { get; set; }
         public string ShopName { get; set; }
+        public bool OnService { get; set; }
 
-        
+
     }
 }

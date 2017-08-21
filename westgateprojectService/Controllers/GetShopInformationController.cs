@@ -66,9 +66,12 @@ namespace westgateprojectService.Controllers
                     { "ShopOwner", retrievedEntity.OwnerID.Split('@')[0] },
                     { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber }
                 };
-                foreach (ContentsEntity entity in tableOwner.ExecuteQuery(rangeQuery))
+                if (retrievedEntity.OnService)
                 {
-                    myActivity.Add(entity.RowKey, entity.Context);
+                    foreach (ContentsEntity entity in tableOwner.ExecuteQuery(rangeQuery))
+                    {
+                        myActivity.Add(entity.RowKey, entity.Context);
+                    }
                 }
                 return myActivity;
             }
