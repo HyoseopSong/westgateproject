@@ -42,7 +42,7 @@ namespace westgateprojectService.Controllers
 
         //    return result;
         //}
-        public IDictionary<string, UserInfoEntity> Get(string id)
+        public List<UserInfoEntity> Get(string id)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
@@ -52,10 +52,10 @@ namespace westgateprojectService.Controllers
 
             TableQuery<UserInfoEntity> queryID = new TableQuery<UserInfoEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id));
 
-            IDictionary<string, UserInfoEntity> result = new Dictionary<string, UserInfoEntity>();
+            List<UserInfoEntity> result = new List<UserInfoEntity>();
             foreach (UserInfoEntity entity in table.ExecuteQuery(queryID))
             {
-                result.Add(entity.ShopName, entity);
+                result.Add(entity);
             }
 
             return result;

@@ -30,6 +30,7 @@ namespace westgateprojectService.DataObjects
         public string AddInfo { get; set; }
         public string Payment { get; set; }
         public bool InitialRegister { get; set; }
+        public DateTime Period { get; set; }
     }
 
 }
