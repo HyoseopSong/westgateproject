@@ -8,7 +8,7 @@ namespace westgateprojectService.DataObjects
 {
     public class UserInfoEntity : TableEntity
     {
-        public UserInfoEntity(string id, string shopLocation, string shopName, string phoneNumber, string addInfo, string payment)
+        public UserInfoEntity(string id, string shopLocation, string shopName, string phoneNumber, string addInfo, string payment, string homepage)
         {
             PartitionKey = id;
             RowKey = shopLocation;
@@ -19,6 +19,8 @@ namespace westgateprojectService.DataObjects
             InitialRegister = true;
             AddInfo = addInfo;
             Payment = payment;
+            Homepage = homepage;
+            Period = DateTime.Now.AddYears(1);
         }
 
         public UserInfoEntity() { }
@@ -31,6 +33,7 @@ namespace westgateprojectService.DataObjects
         public string Payment { get; set; }
         public bool InitialRegister { get; set; }
         public DateTime Period { get; set; }
+        public string Homepage { get; set; }
     }
 
 }

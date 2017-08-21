@@ -15,18 +15,18 @@ namespace westgateprojectService.Controllers
     public class RecentController : ApiController
     {
         // GET: Recent
-        public List<ContentsEntity> Get()
+        public List<RecentEntity> Get()
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("Recent");
             table.CreateIfNotExistsAsync();
-            TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
+            TableQuery<RecentEntity> query = new TableQuery<RecentEntity>();
 
-            List<ContentsEntity> myActivity = new List<ContentsEntity>();
+            List<RecentEntity> myActivity = new List<RecentEntity>();
             // Print the fields for each customer.
-            foreach (ContentsEntity entity in table.ExecuteQuery(query))
+            foreach (RecentEntity entity in table.ExecuteQuery(query))
             {
                 myActivity.Add(entity);
             }

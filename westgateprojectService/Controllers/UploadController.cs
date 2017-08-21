@@ -47,9 +47,9 @@ namespace westgateprojectService.Controllers
             TableResult result = table.Execute(insertOperation);
 
             CloudTable recentTable = tableClient.GetTableReference("Recent");
-            ContentsEntity recentContents = new ContentsEntity(id, blobName, shopName, content);
+            RecentEntity recentContents = new RecentEntity(id, blobName, shopName, content);
             TableOperation recentOperation = TableOperation.Insert(recentContents);
-            table.CreateIfNotExists();
+            recentTable.CreateIfNotExists();
             TableResult recentResult = recentTable.Execute(recentOperation);
         }
 
@@ -63,24 +63,24 @@ namespace westgateprojectService.Controllers
             TableOperation retrieveOperation = TableOperation.Retrieve<ContentsEntity>(id, blobName);
             TableResult retrievedResult = table.Execute(retrieveOperation);
             ContentsEntity deleteEntity = (ContentsEntity)retrievedResult.Result;
-
-            CloudTable recentTable = tableClient.GetTableReference("Recent");
-            TableOperation recentRetrieveOperation = TableOperation.Retrieve<ContentsEntity>(id, blobName);
-            TableResult recentRetrievedResult = recentTable.Execute(recentRetrieveOperation);
-            ContentsEntity recentDeleteEntity = (ContentsEntity)recentRetrievedResult.Result;
-
             if (deleteEntity != null)
             {
                 TableOperation deleteOperation = TableOperation.Delete(deleteEntity);
                 table.Execute(deleteOperation);
-
-                TableOperation recentDeleteOperation = TableOperation.Delete(recentDeleteEntity);
-                recentTable.Execute(recentDeleteOperation);
-
             }
-            else
-            {
 
+
+            CloudTable recentTable = tableClient.GetTableReference("Recent");
+            TableQuery<RecentEntity> rangeQuery = new TableQuery<RecentEntity>().Where(
+                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, blobName));
+            foreach (RecentEntity entity in recentTable.ExecuteQuery(rangeQuery))
+            {
+                if (entity.ID == id)
+                {
+
+                    TableOperation recentDeleteOperation = TableOperation.Delete(entity);
+                    recentTable.Execute(recentDeleteOperation);
+                }
             }
         }
         

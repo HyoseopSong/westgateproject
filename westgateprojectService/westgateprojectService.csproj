@@ -210,6 +210,7 @@
     <Compile Include="DataObjects\ContentsEntity.cs" />
     <Compile Include="DataObjects\MyEntity.cs" />
     <Compile Include="DataObjects\NoticeInformation.cs" />
+    <Compile Include="DataObjects\RecentEntity.cs" />
     <Compile Include="DataObjects\ShopInfoEntity.cs" />
     <Compile Include="DataObjects\ShopInformation.cs" />
     <Compile Include="DataObjects\UserInfoEntity.cs" />
