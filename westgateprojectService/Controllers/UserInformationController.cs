@@ -113,7 +113,7 @@ namespace westgateprojectService.Controllers
             BuildingTable.CreateIfNotExists();
             ShopInfoEntity shopInfo = new ShopInfoEntity(floor, location, id, name, false);
 
-            TableOperation insertShopOperation = TableOperation.Insert(shopInfo);
+            TableOperation insertShopOperation = TableOperation.InsertOrReplace(shopInfo);
             BuildingTable.Execute(insertShopOperation);
         }
 
