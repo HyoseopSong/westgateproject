@@ -63,7 +63,7 @@ namespace westgateprojectService.Controllers
                 IDictionary<string, string> myActivity = new Dictionary<string, string>
                 {
                     { "ShopName", retrievedEntity.ShopName },
-                    { "ShopOwner", retrievedEntity.OwnerID.Split('@')[0] },
+                    { "ShopOwner", retrievedEntity.OwnerID },
                     { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber }
                 };
                 if (retrievedEntity.OnService)
