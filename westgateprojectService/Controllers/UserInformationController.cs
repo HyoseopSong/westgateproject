@@ -106,6 +106,15 @@ namespace westgateprojectService.Controllers
             string[] tempOwnerId = id.Split('@');
             CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
             tableOwner.CreateIfNotExists();
+
+
+
+            CloudTable BuildingTable = tableClient.GetTableReference(building);
+            BuildingTable.CreateIfNotExists();
+            ShopInfoEntity shopInfo = new ShopInfoEntity(floor, location, id, name, false);
+
+            TableOperation insertShopOperation = TableOperation.Insert(shopInfo);
+            BuildingTable.Execute(insertShopOperation);
         }
 
         public void Delete(string id, string shopLocation)

@@ -4,12 +4,13 @@ namespace westgateprojectService.DataObjects
 {
     public class ShopInfoEntity : TableEntity
     {
-        public ShopInfoEntity(string floor, string name, string id, string location)
+        public ShopInfoEntity(string floor, string location, string id, string name, bool onService)
         {
             PartitionKey = floor;
             RowKey = location;
             OwnerID = id;
             ShopName = name;
+            OnService = onService;
         }
         public ShopInfoEntity() { }
 

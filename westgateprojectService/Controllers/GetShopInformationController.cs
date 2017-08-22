@@ -73,6 +73,10 @@ namespace westgateprojectService.Controllers
                         myActivity.Add(entity.RowKey, entity.Context);
                     }
                 }
+                else
+                {
+                    myActivity.Add("NotOnService", "NotAvailable");
+                }
                 return myActivity;
             }
             else
