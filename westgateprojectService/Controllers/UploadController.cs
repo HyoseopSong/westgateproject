@@ -35,7 +35,7 @@ namespace westgateprojectService.Controllers
             return myActivity;
         }
 
-        public void Post(string content, string id, string blobName, string shopName)
+        public void Post(string content, string id, string blobName, string shopName, string shopLocation)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
@@ -47,7 +47,7 @@ namespace westgateprojectService.Controllers
             TableResult result = table.Execute(insertOperation);
 
             CloudTable recentTable = tableClient.GetTableReference("Recent");
-            RecentEntity recentContents = new RecentEntity(id, blobName, shopName, content);
+            RecentEntity recentContents = new RecentEntity(id, blobName, shopName, content, shopLocation);
             TableOperation recentOperation = TableOperation.Insert(recentContents);
             recentTable.CreateIfNotExists();
             TableResult recentResult = recentTable.Execute(recentOperation);
