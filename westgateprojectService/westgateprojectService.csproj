@@ -206,6 +206,7 @@
     <Compile Include="Controllers\RecentController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\UserInformationController.cs" />
+    <Compile Include="DataObjects\BuildingEntity.cs" />
     <Compile Include="DataObjects\BuildingInformation.cs" />
     <Compile Include="DataObjects\ContentsEntity.cs" />
     <Compile Include="DataObjects\MyEntity.cs" />

@@ -146,6 +146,20 @@ namespace westgateprojectService.Controllers
             {
 
             }
+
+            var buildingInfo = shopLocation.Split(':');
+            CloudTable tableBuilding = tableClient.GetTableReference(buildingInfo[0]);
+            TableOperation retrieveBuildingInfoOperation = TableOperation.Retrieve<BuildingEntity>(buildingInfo[1], buildingInfo[2]);
+            TableResult retrievedBuildingInfoResult = tableBuilding.Execute(retrieveBuildingInfoOperation);
+
+            BuildingEntity buildingInfoEntity = (BuildingEntity)retrievedBuildingInfoResult.Result;
+
+            // Print the phone number of the result.
+            if (buildingInfoEntity != null)
+            {
+                TableOperation deleteOperation = TableOperation.Delete(buildingInfoEntity);
+                tableBuilding.Execute(deleteOperation);
+            }
         }
     }
 }
