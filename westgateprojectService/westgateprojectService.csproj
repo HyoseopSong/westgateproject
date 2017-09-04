@@ -197,11 +197,13 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\GetShopMapInfo\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
     <Compile Include="Controllers\GetBuildingInformationController.cs" />
     <Compile Include="Controllers\GetShopInformationController.cs" />
+    <Compile Include="Controllers\GetShopMapInfoController.cs" />
     <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\RecentController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="DataObjects\RecentEntity.cs" />
     <Compile Include="DataObjects\ShopInfoEntity.cs" />
     <Compile Include="DataObjects\ShopInformation.cs" />
+    <Compile Include="DataObjects\ShopMapInfoEntity.cs" />
     <Compile Include="DataObjects\UserInfoEntity.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
