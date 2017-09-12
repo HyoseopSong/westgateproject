@@ -15,18 +15,6 @@ namespace westgateprojectService.Controllers
     [MobileAppController]
     public class GetShopInformationController : ApiController
     {
-        public IDictionary<string, string> Get()
-        {
-            TableQuery<ShopInformation> rangeQuery = new TableQuery<ShopInformation>().Where(
-                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "매장정보"));
-
-            IDictionary<string, string> shopInfo = new Dictionary<string, string>();
-            foreach (ShopInformation entity in Startup.table.ExecuteQuery(rangeQuery))
-            {
-                shopInfo.Add(entity.RowKey, entity.내용);
-            }
-            return shopInfo;
-        }
 
         public IDictionary<string, string> Get(string building, string floor, string location)
         {
@@ -50,15 +38,6 @@ namespace westgateprojectService.Controllers
                 TableOperation retrieveUserInfoOperation = TableOperation.Retrieve<UserInfoEntity>(retrievedEntity.OwnerID, building + ":" + floor + ":" + location);
                 TableResult retrievedUserInfoResult = tableUserInfo.Execute(retrieveUserInfoOperation);
                 UserInfoEntity retrievedUserInfoEntity = (UserInfoEntity)retrievedUserInfoResult.Result;
-                //오너 값으로 등록된 사진 가져오기
-                string[] tempOwnerId = retrievedEntity.OwnerID.Split('@');
-
-                CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
-
-                TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
-                        TableQuery.GenerateFilterCondition("ShopName", QueryComparisons.Equal, retrievedEntity.ShopName));
-
-                TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
 
                 IDictionary<string, string> myActivity = new Dictionary<string, string>
                 {
@@ -66,18 +45,13 @@ namespace westgateprojectService.Controllers
                     { "ShopOwner", retrievedEntity.OwnerID },
                     { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber }
                 };
-                if (retrievedEntity.OnService)
-                {
-                    foreach (ContentsEntity entity in tableOwner.ExecuteQuery(rangeQuery))
-                    {
-                        myActivity.Add(entity.RowKey, entity.Context);
-                    }
-                }
-                else
+                if (!retrievedEntity.OnService)
                 {
                     myActivity.Add("NotOnService", "NotAvailable");
                 }
+
                 return myActivity;
+                
             }
             else
             {
