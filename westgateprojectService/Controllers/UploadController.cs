@@ -85,7 +85,7 @@ namespace westgateprojectService.Controllers
 
             LikeContentsController avatar = new LikeContentsController();
             var likeMemberArr = deleteEntity.LikeMember.Split(':');
-            for(int i = 0; i < likeMemberArr.Length; i++)
+            for(int i = 0; i < likeMemberArr.Length - 1; i++)
             {
                 avatar.Delete(id, blobName, likeMemberArr[i]);
             }
