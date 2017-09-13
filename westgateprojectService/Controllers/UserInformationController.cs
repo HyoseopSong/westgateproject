@@ -15,33 +15,6 @@ namespace westgateprojectService.Controllers
     [MobileAppController]
     public class UserInformationController : ApiController
     {
-        //public List<UserInfoEntity> Get(string id)
-        //{
-        //    CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
-
-        //    CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-        //    CloudTable table = tableClient.GetTableReference("UserInformation");
-        //    // Construct the query operation for all customer entities where PartitionKey="Smith".
-
-        //    TableQuery<UserInfoEntity> queryID = new TableQuery<UserInfoEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id));
-
-        //    List<UserInfoEntity> result = new List<UserInfoEntity>();
-        //    foreach (UserInfoEntity entity in table.ExecuteQuery(queryID))
-        //    {
-        //        UserInfoEntity resultEntity = new UserInfoEntity()
-        //        {
-        //            PartitionKey = entity.PartitionKey,
-        //            RowKey = entity.RowKey,
-        //            ShopBuilding = entity.ShopBuilding,
-        //            ShopFloor = entity.ShopFloor,
-        //            ShopLocation = entity.ShopLocation,
-        //            PhoneNumber = entity.PhoneNumber
-        //        };
-        //        result.Add(resultEntity);
-        //    }
-
-        //    return result;
-        //}
         public List<UserInfoEntity> Get(string id)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));

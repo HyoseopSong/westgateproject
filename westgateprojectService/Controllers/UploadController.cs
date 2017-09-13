@@ -14,23 +14,29 @@ namespace westgateprojectService.Controllers
     [MobileAppController]
     public class UploadController : ApiController
     {
-        public List<MyEntity> Get(string id)
+        public List<ContentsEntity> Get(string id)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
             
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            var containerName = id.Split('@');
-            CloudTable table = tableClient.GetTableReference(containerName[0]);
-            table.CreateIfNotExistsAsync();
-            TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
+            var userId = id.Split('@')[0];
+            CloudTable table = tableClient.GetTableReference(userId);
+            TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
+                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id));
 
-            List<MyEntity> myActivity = new List<MyEntity>();
+            List<ContentsEntity> myActivity = new List<ContentsEntity>();
             // Print the fields for each customer.
-            foreach (ContentsEntity entity in table.ExecuteQuery(query))
+            foreach (ContentsEntity entity in table.ExecuteQuery(rangeQuery))
             {
-                MyEntity result = new MyEntity(entity.RowKey, entity.ShopName, entity.Context);
-                
-                myActivity.Add(result);
+                if (entity.LikeMember.IndexOf(userId) >= 0)
+                {
+                    entity.LikeMember = "True";
+                }
+                else
+                {
+                    entity.LikeMember = "False";
+                }
+                myActivity.Add(entity);
             }
             return myActivity;
         }
