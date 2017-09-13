@@ -25,9 +25,7 @@ namespace westgateprojectService.Controllers
 
             TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
                     TableQuery.GenerateFilterCondition("ShopName", QueryComparisons.Equal, shopName));
-
-            TableQuery<ContentsEntity> query = new TableQuery<ContentsEntity>();
-
+            
             List<ContentsEntity> shopContents = new List<ContentsEntity>();
             foreach (ContentsEntity entity in tableOwner.ExecuteQuery(rangeQuery))
             {
@@ -64,20 +62,24 @@ namespace westgateprojectService.Controllers
             // Assign the result to a CustomerEntity.
             ContentsEntity updateEntity = (ContentsEntity)retrievedResult.Result;
 
+            LikeContentsController avatar = new LikeContentsController();
             switch(change)
             {
                 case "up":
                     updateEntity.LikeMember += likeMember + ":";
                     updateEntity.Like++;
+                    avatar.Post(shopOwner, blobName, likeMember);
                     break;
                 case "down":
                     updateEntity.LikeMember = updateEntity.LikeMember.Replace(likeMember + ":", "");
                     updateEntity.Like--;
+                    avatar.Delete(shopOwner, blobName, likeMember);
                     break;
             }
             
             TableOperation updateOperation = TableOperation.Replace(updateEntity);
             tableOwner.Execute(updateOperation);
+
             
         }
     }

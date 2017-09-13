@@ -71,16 +71,23 @@ namespace westgateprojectService.Controllers
 
 
             CloudTable recentTable = tableClient.GetTableReference("Recent");
-            TableQuery<RecentEntity> rangeQuery = new TableQuery<RecentEntity>().Where(
-                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, blobName));
-            foreach (RecentEntity entity in recentTable.ExecuteQuery(rangeQuery))
-            {
-                if (entity.ID == id)
-                {
 
-                    TableOperation recentDeleteOperation = TableOperation.Delete(entity);
-                    recentTable.Execute(recentDeleteOperation);
-                }
+            retrieveOperation = TableOperation.Retrieve<RecentEntity>(blobName.Split('.')[0], blobName);
+            retrievedResult = recentTable.Execute(retrieveOperation);
+            RecentEntity deleteRecentEntity = (RecentEntity)retrievedResult.Result;
+            
+            if (deleteRecentEntity != null)
+            {
+
+                TableOperation recentDeleteOperation = TableOperation.Delete(deleteRecentEntity);
+                recentTable.Execute(recentDeleteOperation);
+            }
+
+            LikeContentsController avatar = new LikeContentsController();
+            var likeMemberArr = deleteEntity.LikeMember.Split(':');
+            for(int i = 0; i < likeMemberArr.Length; i++)
+            {
+                avatar.Delete(id, blobName, likeMemberArr[i]);
             }
         }
         

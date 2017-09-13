@@ -198,14 +198,19 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\GetShopContents\" />
+    <Folder Include="Views\GetShopContent\" />
+    <Folder Include="Views\GetShopInfoEntity\" />
     <Folder Include="Views\GetShopMapInfo\" />
+    <Folder Include="Views\LikeContents\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Startup.MobileApp.cs" />
     <Compile Include="Controllers\GetBuildingInformationController.cs" />
+    <Compile Include="Controllers\GetShopContentController.cs" />
     <Compile Include="Controllers\GetShopContentsController.cs" />
     <Compile Include="Controllers\GetShopInformationController.cs" />
     <Compile Include="Controllers\GetShopMapInfoController.cs" />
+    <Compile Include="Controllers\LikeContentsController.cs" />
     <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\RecentController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -213,6 +218,7 @@
     <Compile Include="DataObjects\BuildingEntity.cs" />
     <Compile Include="DataObjects\BuildingInformation.cs" />
     <Compile Include="DataObjects\ContentsEntity.cs" />
+    <Compile Include="DataObjects\LikeEntity.cs" />
     <Compile Include="DataObjects\MyEntity.cs" />
     <Compile Include="DataObjects\NoticeInformation.cs" />
     <Compile Include="DataObjects\RecentEntity.cs" />
