@@ -46,9 +46,9 @@ namespace westgateprojectService.Controllers
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-
-            CloudTable tableOwner = tableClient.GetTableReference(shopOwnerId);
+            
             CloudTable table = tableClient.GetTableReference(likeMember);
+            table.CreateIfNotExistsAsync();
             LikeEntity contents = new LikeEntity(shopOwner, blobName);
             TableOperation insertOperation = TableOperation.Insert(contents);
             TableResult result = table.Execute(insertOperation);
@@ -66,6 +66,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             
             CloudTable table = tableClient.GetTableReference(likeMember);
+            table.CreateIfNotExistsAsync();
                                    
             TableOperation retrieveOperation = TableOperation.Retrieve<LikeEntity>(shopOwner, blobName);
             TableResult retrievedResult = table.Execute(retrieveOperation);

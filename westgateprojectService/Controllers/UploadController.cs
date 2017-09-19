@@ -21,6 +21,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var userId = id.Split('@')[0];
             CloudTable table = tableClient.GetTableReference(userId);
+            table.CreateIfNotExistsAsync();
             TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
                     TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id));
 
@@ -66,6 +67,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             var containerName = id.Split('@');
             CloudTable table = tableClient.GetTableReference(containerName[0]);
+            table.CreateIfNotExistsAsync();
             TableOperation retrieveOperation = TableOperation.Retrieve<ContentsEntity>(id, blobName);
             TableResult retrievedResult = table.Execute(retrieveOperation);
             ContentsEntity deleteEntity = (ContentsEntity)retrievedResult.Result;

@@ -94,6 +94,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("UserInformation");
 
+            table.CreateIfNotExistsAsync();
             // Define the query, and select only the Email property.
             TableQuery<DynamicTableEntity> projectionQuery = new TableQuery<DynamicTableEntity>().Select(new string[] { "ShopName" });
 
@@ -106,19 +107,18 @@ namespace westgateprojectService.Controllers
                     return false;
             }
 
-            table.CreateIfNotExists();
             UserInfoEntity contents = new UserInfoEntity(id, shopLocation, name, number, addInfo, payment, homepage);
             TableOperation insertOperation = TableOperation.InsertOrReplace(contents);
             TableResult result = table.Execute(insertOperation);
 
             string[] tempOwnerId = id.Split('@');
             CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
-            tableOwner.CreateIfNotExists();
+            tableOwner.CreateIfNotExistsAsync();
 
 
 
             CloudTable BuildingTable = tableClient.GetTableReference(building);
-            BuildingTable.CreateIfNotExists();
+            BuildingTable.CreateIfNotExistsAsync();
             ShopInfoEntity shopInfo = new ShopInfoEntity(floor, location, id, name, false);
 
             TableOperation insertShopOperation = TableOperation.InsertOrReplace(shopInfo);
@@ -159,6 +159,7 @@ namespace westgateprojectService.Controllers
 
             var buildingInfo = shopLocation.Split(':');
             CloudTable tableBuilding = tableClient.GetTableReference(buildingInfo[0]);
+            tableBuilding.CreateIfNotExistsAsync();
             TableOperation retrieveBuildingInfoOperation = TableOperation.Retrieve<BuildingEntity>(buildingInfo[1], buildingInfo[2]);
             TableResult retrievedBuildingInfoResult = tableBuilding.Execute(retrieveBuildingInfoOperation);
 

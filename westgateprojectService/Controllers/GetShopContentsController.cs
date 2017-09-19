@@ -22,6 +22,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable tableOwner = tableClient.GetTableReference(shopOwner);
+            tableOwner.CreateIfNotExistsAsync();
 
             TableQuery<ContentsEntity> rangeQuery = new TableQuery<ContentsEntity>().Where(
                     TableQuery.GenerateFilterCondition("ShopName", QueryComparisons.Equal, shopName));
@@ -52,7 +53,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable tableOwner = tableClient.GetTableReference(shopOwner.Split('@')[0]);
-
+            tableOwner.CreateIfNotExistsAsync();
             // Create a retrieve operation that expects a customer entity.
             TableOperation retrieveOperation = TableOperation.Retrieve<ContentsEntity>(shopOwner, blobName);
 

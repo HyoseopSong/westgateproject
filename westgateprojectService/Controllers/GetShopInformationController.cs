@@ -22,6 +22,7 @@ namespace westgateprojectService.Controllers
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference(building);
+            table.CreateIfNotExistsAsync();
             // Construct the query operation for all customer entities where PartitionKey="Smith".
 
             // Create a retrieve operation that takes a customer entity.
