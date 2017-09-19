@@ -22,7 +22,7 @@ namespace westgateprojectService.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
 
             CloudTable tableOwner = tableClient.GetTableReference(userId.Split('@')[0]);
-
+            tableOwner.CreateIfNotExistsAsync();
             TableQuery<LikeEntity> rangeQuery = new TableQuery<LikeEntity>().Where(
                     TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.NotEqual, userId));
             
