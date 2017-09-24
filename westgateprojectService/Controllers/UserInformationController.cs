@@ -101,11 +101,11 @@ namespace westgateprojectService.Controllers
             // Define an entity resolver to work with the entity after retrieval.
             EntityResolver<string> resolver = (pk, rk, ts, props, etag) => props.ContainsKey("ShopName") ? props["ShopName"].StringValue : null;
 
-            foreach (string projectedShopName in table.ExecuteQuery(projectionQuery, resolver, null, null))
-            {
-                if (projectedShopName == name)
-                    return false;
-            }
+            //foreach (string projectedShopName in table.ExecuteQuery(projectionQuery, resolver, null, null))
+            //{
+            //    if (projectedShopName == name)
+            //        return false;
+            //}
 
             UserInfoEntity contents = new UserInfoEntity(id, shopLocation, name, number, addInfo, payment, homepage);
             TableOperation insertOperation = TableOperation.InsertOrReplace(contents);
@@ -123,6 +123,57 @@ namespace westgateprojectService.Controllers
 
             TableOperation insertShopOperation = TableOperation.InsertOrReplace(shopInfo);
             BuildingTable.Execute(insertShopOperation);
+
+            return true;
+        }
+
+        public bool Post(string id, string name, string building, string floor, string location, string number, string addInfo, string payment, string homepage, string pushID)
+        {
+            Post(id, name, building, floor, location, number, addInfo, payment, homepage);
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+
+            //string shopLocation = building + ":" + floor + ":" + location;
+
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            //CloudTable table = tableClient.GetTableReference("UserInformation");
+
+            //table.CreateIfNotExistsAsync();
+            //// Define the query, and select only the Email property.
+            //TableQuery<DynamicTableEntity> projectionQuery = new TableQuery<DynamicTableEntity>().Select(new string[] { "ShopName" });
+
+            //// Define an entity resolver to work with the entity after retrieval.
+            //EntityResolver<string> resolver = (pk, rk, ts, props, etag) => props.ContainsKey("ShopName") ? props["ShopName"].StringValue : null;
+
+            ////foreach (string projectedShopName in table.ExecuteQuery(projectionQuery, resolver, null, null))
+            ////{
+            ////    if (projectedShopName == name)
+            ////        return false;
+            ////}
+
+            //UserInfoEntity contents = new UserInfoEntity(id, shopLocation, name, number, addInfo, payment, homepage);
+            //TableOperation insertOperation = TableOperation.InsertOrReplace(contents);
+            //TableResult result = table.Execute(insertOperation);
+
+            //string[] tempOwnerId = id.Split('@');
+            //CloudTable tableOwner = tableClient.GetTableReference(tempOwnerId[0]);
+            //tableOwner.CreateIfNotExistsAsync();
+
+
+
+            //CloudTable BuildingTable = tableClient.GetTableReference(building);
+            //BuildingTable.CreateIfNotExistsAsync();
+            //ShopInfoEntity shopInfo = new ShopInfoEntity(floor, location, id, name, false);
+
+            //TableOperation insertShopOperation = TableOperation.InsertOrReplace(shopInfo);
+            //BuildingTable.Execute(insertShopOperation);
+
+            CloudTable pushTable = tableClient.GetTableReference("PushID");
+            pushTable.CreateIfNotExistsAsync();
+
+            PushIDEntity pushIDEntity = new PushIDEntity(id, name, pushID);
+            TableOperation insertPushIDOperation = TableOperation.InsertOrReplace(pushIDEntity);
+            pushTable.Execute(insertPushIDOperation);
 
             return true;
         }
