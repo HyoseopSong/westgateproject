@@ -44,7 +44,8 @@ namespace westgateprojectService.Controllers
                 {
                     { "ShopName", retrievedEntity.ShopName },
                     { "ShopOwner", retrievedEntity.OwnerID },
-                    { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber }
+                    { "PhoneNumber", retrievedUserInfoEntity.PhoneNumber },
+                    { "Homepage", retrievedUserInfoEntity.Homepage }
                 };
                 if (!retrievedEntity.OnService)
                 {
